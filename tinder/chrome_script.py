@@ -54,26 +54,30 @@ def openai(question):
 
 
     driver.switch_to.window(driver.window_handles[1])
-    try:
-        # wait for the page to load
-        #time.sleep(4)   
-        chatbox = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[1]/main/div[2]/form/div/div[2]/textarea')
-        chatbox.send_keys(question)
-        time.sleep(2)   
-        button = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[1]/main/div[2]/form/div/div[2]/button')
-        button.click()
-        time.sleep(5)
-        reply = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[1]/main/div[1]/div/div/div/div[2]/div/div[2]/div[1]/div/div/p')
-        #output = reply.get_attribute('style')
-        new_chat_btn = driver.find_element(By.XPATH, '//a[text()="New chat"]')
-        new_chat_btn.click()
-        time.sleep(0.5)
+    i = 1
+    while True:
+        try:
+            # wait for the page to load
+            #time.sleep(4)   
+            chatbox = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[' + str(i) + ']/main/div[2]/form/div/div[2]/textarea')
+            chatbox.send_keys(question)
+            time.sleep(2)   
+            button = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[' + str(i) + ']/main/div[2]/form/div/div[2]/button')
+            button.click()
+            time.sleep(5)
+            reply = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[' + str(i) + ']/main/div[1]/div/div/div/div[2]/div/div[2]/div[1]/div/div/p')
+            #output = reply.get_attribute('style')
+            new_chat_btn = driver.find_element(By.XPATH, '//a[text()="New chat"]')
+            new_chat_btn.click()
+            time.sleep(0.5)
 
-        driver.switch_to.window(driver.window_handles[0])
-        return reply.text
-    except:
-        driver.switch_to.window(driver.window_handles[0])
-        return ''
+            driver.switch_to.window(driver.window_handles[0])
+            return reply.text
+        except:
+            #driver.switch_to.window(driver.window_handles[0])
+            i = i+1
+            pass
+            #return ''
 
 def init():
     global driver
@@ -130,6 +134,9 @@ def like():
     time.sleep(1)
     while True:
         try:    
+            matches_button = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/nav[1]/div/a')
+            matches_button.click()
+            time.sleep(0.2)
             image = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[2]/div[1]/div[1]/span[1]/div')
             gl_url = image.get_attribute('style')
             print(gl_url)
@@ -163,12 +170,21 @@ def like():
 def reply():
     global driver
     try: 
+        explore_btn = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/nav[1]/div/a')
+        explore_btn.click()
         i = 2
-        while True:
-            chat_icon = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[' + str(i) +']/a/div[1]/div')
-            chat_icon.click()
-            text_area = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[3]/form/textarea')
-            
+        while i < 10:            
+            try: 
+                chat_icon = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[' + str(i) +']/a/div[1]/div')
+                chat_icon.click()
+                text_area = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[3]/form/textarea')
+                intro = openai('say something nice as a tinder introduction to a woman')
+                text_area.send_keys(intro)
+                submit_button = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[3]/form/button')
+            except:
+                pass
+            i=i+1
+            time.sleep(1)
         #/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[2]/a/div[1]/div
         #/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[3]/a/div[1]/div
         #/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[9]/a/div[1]/div
