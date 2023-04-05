@@ -86,7 +86,7 @@ def init():
 
     chrome_options.user_data_dir=str(Path.home())+"\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 1"
 
-    driver = webdriver.Chrome(options = chrome_options, use_subprocess=True)
+    driver = webdriver.Chrome(options = chrome_options, use_subprocess=True, version_main = 111)
 
 def load():
     global driver
@@ -150,6 +150,9 @@ def like():
                         element = '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div[1]/div[1]/div/div[' + str(i) +']/div/div[4]/button'
                         like_button = driver.find_element(By.XPATH, element)
                         like_button.click()
+                        time.sleep(1)
+                        close_button = driver.find_element(By.XPATH, '/html/body/div[2]/main/div/div[2]/button')
+                        close_button.click()
                     except:
                         pass
                 break
@@ -159,7 +162,16 @@ def like():
 
 def reply():
     global driver
-    try:  
+    try: 
+        i = 2
+        while True:
+            chat_icon = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[' + str(i) +']/a/div[1]/div')
+            chat_icon.click()
+            text_area = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[1]/div/main/div[1]/div/div/div/div[1]/div/div/div[3]/form/textarea')
+            
+        #/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[2]/a/div[1]/div
+        #/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[3]/a/div[1]/div
+        #/html/body/div[1]/div/div[1]/div/aside/nav[2]/div/div/div/div[2]/div[1]/ul/li[9]/a/div[1]/div
         print("reply logic")
     except:
         pass
@@ -179,14 +191,7 @@ def main():
 
     init()
     load()
-    like()
-    like()
-    like()
-    like()
-    like()
-    like()
-    like()
-    like()
+    #while True:
     like()
     reply()
     new_message()
